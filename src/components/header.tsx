@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Header() {
     return (
-        <header className="top-0 flex h-16 items-center gap-4 bg-background px-2 sm:px-4 md:px-6 lg:px-12 lg:py-10 xl:px-20">
+        <header className="top-0 flex h-16 items-center gap-4 bg-background px-6 sm:px-4 md:px-6 lg:px-12 lg:py-10 xl:px-20">
             <Link
                 href="/"
                 className="flex-col items-center gap-2 overflow-hidden"
@@ -22,7 +22,7 @@ export default function Header() {
                         alt="Logo"
                         width={100}
                         height={32}
-                        className="align-bottom"
+                        className="hidden md:block align-bottom"
                     />
                 </div>
             </Link>
