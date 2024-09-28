@@ -2,6 +2,8 @@ import Image from "next/image";
 import CourseCard from "@/components/course-card";
 import { Button } from "@/components/ui/button";
 import ReviewCard from "@/components/review-card";
+import { Course } from "@/app/type";
+import { getPopularReview, getTailoredCourse } from "@/app/actions/home-action";
 import {
     Carousel,
     CarouselContent,
@@ -10,67 +12,10 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const tempCourses = [
-    {
-        id: 1,
-        name: "Introduction to JavaScript",
-        instructor_name: "John Doe",
-        price: 49.99,
-        image: "/assets/homepage/temp-course-adobe.png",
-        average_rating: 4.5,
-        isDashboard: false,
-    },
-    {
-        id: 2,
-        name: "Adobe Photoshop: A Comprehensive Guide",
-        instructor_name: "John Doe",
-        price: 49.99,
-        image: "/assets/homepage/temp-course-adobe.png",
-        average_rating: 4.5,
-        isDashboard: false,
-    },
-    {
-        id: 3,
-        name: "Data Science: An Introduction",
-        instructor_name: "Emily Kim",
-        price: 49.99,
-        image: "/assets/homepage/temp-course-adobe.png",
-        average_rating: 4.5,
-        isDashboard: false,
-    },
-    {
-        id: 4,
-        name: "Machine Learning: An Introduction",
-        instructor_name: "Emily Kim",
-        price: 49.99,
-        image: "/assets/homepage/temp-course-adobe.png",
-        average_rating: 4.5,
-        isDashboard: false,
-    },
-];
+export default async function Home() {
+    const popularReviews = await getPopularReview();
+    const tailoredCourses = await getTailoredCourse();
 
-const tempReviews = [
-    {
-        id: 1,
-        student_name: "Sarah F.",
-        review: "Kursus ini benar-benar mengubah karier saya! Proyek langsung dan contoh nyata membuat konsepnya mudah dipahami.",
-        course_name: "Adobe Photoshop: A Comprehensive Guide",
-    },
-    {
-        id: 2,
-        student_name: "Michael B.",
-        review: "Materi kursus sangat mendalam, dan instruktur menjelaskan setiap konsep dengan jelas. Sangat direkomendasikan!",
-        course_name: "Web Development: From Beginner to Advanced",
-    },
-    {
-        id: 3,
-        student_name: "Emily T.",
-        review: "Saya menyukai cara instruktur menyajikan setiap topik. Pelajaran yang diberikan sangat relevan untuk karier saya.",
-        course_name: "Data Science: An Introduction",
-    },
-];
-
-export default function Home() {
     return (
         <main>
             <section
@@ -125,7 +70,7 @@ export default function Home() {
                         className="w-full max-w-sm"
                     >
                         <CarouselContent>
-                            {tempCourses.map((course) => (
+                            {tailoredCourses.map((course: Course) => (
                                 <CarouselItem
                                     key={course.id}
                                     className="flex justify-center"
@@ -137,8 +82,6 @@ export default function Home() {
                                             instructor_name={
                                                 course.instructor_name
                                             }
-                                            price={course.price}
-                                            image={course.image}
                                             average_rating={
                                                 course.average_rating
                                             }
@@ -156,7 +99,7 @@ export default function Home() {
                 </div>
 
                 <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
-                    {tempCourses.map((course) => (
+                    {tailoredCourses.map((course: Course) => (
                         <div
                             key={course.id}
                             className="w-full max-w-[250px] mx-auto"
@@ -165,8 +108,6 @@ export default function Home() {
                                 id={course.id}
                                 name={course.name}
                                 instructor_name={course.instructor_name}
-                                price={course.price}
-                                image={course.image}
                                 average_rating={course.average_rating}
                                 isDashboard={false}
                             />
@@ -217,16 +158,16 @@ export default function Home() {
                         className="w-full max-w-sm"
                     >
                         <CarouselContent>
-                            {tempReviews.map((review) => (
+                            {popularReviews.map((review) => (
                                 <CarouselItem
-                                    key={review.id}
+                                    key={review.course_id}
                                     className="flex justify-center"
                                 >
                                     <div className="p-1">
                                         <ReviewCard
-                                            id={review.id}
-                                            student_name={review.student_name}
-                                            course_name={review.course_name}
+                                            id={review.course_id}
+                                            student_name={review.student.name}
+                                            course_name={review.course.name}
                                             review={review.review}
                                         />
                                     </div>
@@ -240,15 +181,19 @@ export default function Home() {
                     </Carousel>
                 </div>
                 <div className="hidden md:flex flex-col md:flex-row justify-center items-center md:items-stretch gap-5 mt-5">
-                    {tempReviews.map((review) => (
-                        <ReviewCard
-                            key={review.id}
-                            id={review.id}
-                            student_name={review.student_name}
-                            course_name={review.course_name}
-                            review={review.review}
-                        />
-                    ))}
+                    {popularReviews.length > 0 ? (
+                        popularReviews.map((review) => (
+                            <ReviewCard
+                                key={review.course_id}
+                                id={review.course_id}
+                                student_name={review.student.name}
+                                course_name={review.course.name}
+                                review={review.review}
+                            />
+                        ))
+                    ) : (
+                        <p>No reviews available</p>
+                    )}
                 </div>
             </section>
         </main>
