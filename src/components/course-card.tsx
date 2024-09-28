@@ -15,7 +15,6 @@ export default function CourseCard({
     id,
     name,
     instructor_name,
-    price,
     image,
     average_rating,
     isDashboard,
