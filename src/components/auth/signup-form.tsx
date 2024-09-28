@@ -37,7 +37,7 @@ export default function SignupForm() {
         }
     };
     return (
-        <Card className="w-[500px]">
+        <Card className="w-full max-w-[500px] mx-auto p-4 md:p-6 lg:w-[500px]">
             <CardHeader>
                 <CardTitle className="text-center pb-2 mt-6">Sign Up</CardTitle>
                 <CardDescription className="text-center">
@@ -190,15 +190,15 @@ export default function SignupForm() {
                         </TabsContent>
                     </Tabs>
                 </CardContent>
-                <CardFooter className="flex flex-col items-center ">
+                <CardFooter className="flex flex-col items-center">
                     <Button
                         type="submit"
-                        className="w-[420px]"
+                        className="w-full max-w-[420px] md:w-[420px]"
                         disabled={loading}
                     >
                         Create Account
                     </Button>
-                    <CardDescription className="mt-6 w-[420px] text-xs text-gray-600 text-center">
+                    <CardDescription className="mt-6 w-full max-w-[420px] text-xs text-gray-600 text-center">
                         By clicking &apos;Continue&apos;, you acknowledge that
                         you have read and accept the{" "}
                         <a href="#" className="font-bold">
