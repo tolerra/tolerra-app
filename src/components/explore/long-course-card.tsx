@@ -17,7 +17,6 @@ export default function CourseCard({
   instructor: string;
   rating: number;
   category: string;
-  difficulty: string;
   imageSrc: string;
   isLowVisionFriendly: boolean;
 }) {

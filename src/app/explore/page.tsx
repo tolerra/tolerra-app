@@ -8,9 +8,8 @@ export interface ExploreProps {
   searchParams?: {
     name?: string;
     page?: string;
-    category_id?: string;
+    category?: string;
     min_rating?: string;
-    difficulty?: string;
   };
 }
 

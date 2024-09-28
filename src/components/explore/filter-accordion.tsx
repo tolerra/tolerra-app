@@ -13,13 +13,11 @@ interface FilterAccordionProps {
 }
 
 const ratings = [1, 2, 3, 4, 5];
-const difficulties = ["beginner", "intermediate", "expert"];
 
 export default function FilterAccordion({ categories }: FilterAccordionProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [, setIsSmallScreen] = useState(false);
 
@@ -32,17 +30,16 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const addToUrl = (arr: Array<string | number>, param: string) => { 
+  const addToUrl = (arr: Array<string | number>, param: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(param, arr.join(',')); 
+    params.set(param, arr.join(','));
     router.push(`?${params.toString()}`);
   };
 
   const clearFilters = () => {
     setSelectedRatings([]);
-    setSelectedDifficulty([]);
     setSelectedCategories([]);
-    router.push(window.location.pathname); 
+    router.push(window.location.pathname);
   };
 
   const handleRatingChange = (rating: number) => {
@@ -59,29 +56,15 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
     });
   };
 
-  const handleDifficultyChange = (difficulty: string) => {
-    setSelectedDifficulty((prevSelectedDifficulty) => {
-      if (prevSelectedDifficulty.includes(difficulty)) {
-        const newDiff = prevSelectedDifficulty.filter((d) => d !== difficulty);
-        addToUrl(newDiff, "difficulty");
-        return newDiff;
-      } else {
-        const newDiff = [...prevSelectedDifficulty, difficulty];
-        addToUrl(newDiff, "difficulty");
-        return newDiff;
-      }
-    });
-  };
-
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prevSelectedCategories) => {
       if (prevSelectedCategories.includes(category)) {
         const newCategories = prevSelectedCategories.filter((c) => c !== category);
-        addToUrl(newCategories, "name");
+        addToUrl(newCategories, "category"); // Use category name
         return newCategories;
       } else {
         const newCategories = [...prevSelectedCategories, category];
-        addToUrl(newCategories, "name");
+        addToUrl(newCategories, "category"); // Use category name
         return newCategories;
       }
     });
@@ -118,24 +101,6 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
                   {Array.from({ length: rating }, (_, index) => (
                     <FaStar key={index} className="text-yellow-500" />
                   ))}
-                </Label>
-              </div>
-            ))}
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="difficulty">
-          <AccordionTrigger>Difficulty</AccordionTrigger>
-          <AccordionContent>
-            {difficulties.map((difficulty) => (
-              <div className="flex items-center space-x-2 mb-2" key={difficulty}>
-                <Checkbox
-                  id={`difficulty-${difficulty}`}
-                  checked={selectedDifficulty.includes(difficulty)}
-                  onCheckedChange={() => handleDifficultyChange(difficulty)}
-                />
-                <Label htmlFor={`difficulty-${difficulty}`} className="capitalize">
-                  {difficulty}
                 </Label>
               </div>
             ))}

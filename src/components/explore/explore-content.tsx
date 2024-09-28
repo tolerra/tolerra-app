@@ -19,7 +19,6 @@ export default function ExploreContent({
       instructor: "John Smith",
       rating: 2,
       category: "Development",
-      difficulty: "Beginner",
       imageSrc: "https://picsum.photos/223/120",
       isLowVisionFriendly: true,
     },
@@ -30,7 +29,6 @@ export default function ExploreContent({
       instructor: "Jane Doe",
       rating: 4.8,
       category: "Development",
-      difficulty: "Advanced",
       imageSrc: "https://picsum.photos/223/120",
       isLowVisionFriendly: true,
     },
@@ -41,32 +39,9 @@ export default function ExploreContent({
       instructor: "Sarah Lee",
       rating: 3.5,
       category: "Business",
-      difficulty: "Intermediate",
       imageSrc: "https://picsum.photos/223/120",
       isLowVisionFriendly: true,
     },
-    {
-        id: 4,
-        title: "Marketing Fundamentals",
-        description: "Learn the core principles of marketing.",
-        instructor: "Sarah Lee",
-        rating: 3.5,
-        category: "Business",
-        difficulty: "Intermediate",
-        imageSrc: "https://picsum.photos/223/120",
-        isLowVisionFriendly: true,
-      },
-      {
-        id: 3,
-        title: "Marketing Fundamentals",
-        description: "Learn the core principles of marketing.",
-        instructor: "Sarah Lee",
-        rating: 3.5,
-        category: "Business",
-        difficulty: "Intermediate",
-        imageSrc: "https://picsum.photos/223/120",
-        isLowVisionFriendly: true,
-      },
   ];
 
   const searchParams = useSearchParams();
@@ -80,8 +55,8 @@ export default function ExploreContent({
     if (courseSearchParams?.min_rating) {
       matches = matches && course.rating >= parseFloat(courseSearchParams.min_rating);
     }
-    if (courseSearchParams?.difficulty) {
-      matches = matches && course.difficulty.toLowerCase() === courseSearchParams.difficulty.toLowerCase();
+    if (courseSearchParams?.category) {
+      matches = matches && course.category.toLowerCase() === courseSearchParams.category.toLowerCase();
     }
     return matches;
   });
@@ -109,7 +84,6 @@ export default function ExploreContent({
                   imageSrc={course.imageSrc}
                   isLowVisionFriendly={course.isLowVisionFriendly}
                   category={course.category}
-                  difficulty={course.difficulty}
                 />
               </li>
             ))}
