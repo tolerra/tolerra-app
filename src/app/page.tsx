@@ -63,56 +63,66 @@ export default async function Home() {
                 </h4>
 
                 <div className="md:hidden w-full flex justify-center">
-                    <Carousel
-                        opts={{
-                            align: "center",
-                        }}
-                        className="w-full max-w-sm"
-                    >
-                        <CarouselContent>
-                            {tailoredCourses.map((course: Course) => (
-                                <CarouselItem
-                                    key={course.id}
-                                    className="flex justify-center"
-                                >
-                                    <div className="p-1 w-full max-w-[250px]">
-                                        <CourseCard
-                                            id={course.id}
-                                            name={course.name}
-                                            instructor_name={
-                                                course.instructor_name
-                                            }
-                                            average_rating={
-                                                course.average_rating
-                                            }
-                                            isDashboard={false}
-                                        />
-                                    </div>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                        <div className="flex justify-center mt-4">
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </div>
-                    </Carousel>
+                    {tailoredCourses.length > 0 ? (
+                        <Carousel
+                            opts={{
+                                align: "center",
+                            }}
+                            className="w-full max-w-sm"
+                        >
+                            <CarouselContent>
+                                {tailoredCourses.map((course: Course) => (
+                                    <CarouselItem
+                                        key={course.id}
+                                        className="flex justify-center"
+                                    >
+                                        <div className="p-1 w-full max-w-[250px]">
+                                            <CourseCard
+                                                id={course.id}
+                                                name={course.name}
+                                                instructor_name={
+                                                    course.instructor_name
+                                                }
+                                                average_rating={
+                                                    course.average_rating
+                                                }
+                                                isDashboard={false}
+                                            />
+                                        </div>
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <div className="flex justify-center mt-4">
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </div>
+                        </Carousel>
+                    ) : (
+                        <p>No courses available</p>
+                    )}
                 </div>
 
                 <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
-                    {tailoredCourses.map((course: Course) => (
-                        <div
-                            key={course.id}
-                            className="w-full max-w-[250px] mx-auto"
-                        >
-                            <CourseCard
-                                id={course.id}
-                                name={course.name}
-                                instructor_name={course.instructor_name}
-                                average_rating={course.average_rating}
-                                isDashboard={false}
-                            />
-                        </div>
-                    ))}
+                    {tailoredCourses.length > 0 ? (
+                        tailoredCourses.map((course: Course) => (
+                            <div
+                                key={course.id}
+                                className="w-full max-w-[250px] mx-auto"
+                            >
+                                <CourseCard
+                                    id={course.id}
+                                    name={course.name}
+                                    instructor_name={course.instructor_name}
+                                    average_rating={course.average_rating}
+                                    isDashboard={false}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-center col-span-4">
+                            No courses available
+                        </p>
+                    )}
                 </div>
             </section>
 
@@ -151,34 +161,40 @@ export default async function Home() {
                     Bagaimana pelajar sepertimu mencapai tujuannya
                 </h2>
                 <div className="md:hidden w-full flex justify-center">
-                    <Carousel
-                        opts={{
-                            align: "center",
-                        }}
-                        className="w-full max-w-sm"
-                    >
-                        <CarouselContent>
-                            {popularReviews.map((review) => (
-                                <CarouselItem
-                                    key={review.course_id}
-                                    className="flex justify-center"
-                                >
-                                    <div className="p-1">
-                                        <ReviewCard
-                                            id={review.course_id}
-                                            student_name={review.student.name}
-                                            course_name={review.course.name}
-                                            review={review.review}
-                                        />
-                                    </div>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                        <div className="flex justify-center mt-4">
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </div>
-                    </Carousel>
+                    {popularReviews.length > 0 ? (
+                        <Carousel
+                            opts={{
+                                align: "center",
+                            }}
+                            className="w-full max-w-sm"
+                        >
+                            <CarouselContent>
+                                {popularReviews.map((review) => (
+                                    <CarouselItem
+                                        key={review.course_id}
+                                        className="flex justify-center"
+                                    >
+                                        <div className="p-1">
+                                            <ReviewCard
+                                                id={review.course_id}
+                                                student_name={
+                                                    review.student.name
+                                                }
+                                                course_name={review.course.name}
+                                                review={review.review}
+                                            />
+                                        </div>
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <div className="flex justify-center mt-4">
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </div>
+                        </Carousel>
+                    ) : (
+                        <p>No reviews available</p>
+                    )}
                 </div>
                 <div className="hidden md:flex flex-col md:flex-row justify-center items-center md:items-stretch gap-5 mt-5">
                     {popularReviews.length > 0 ? (
