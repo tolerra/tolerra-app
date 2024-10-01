@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import LongCourseCard from "./long-course-card";
 import PaginationClient from "@/components/pagination-client";
 import { ExploreProps } from "@/app/explore/page";
@@ -45,8 +45,14 @@ export default function ExploreContent({
         },
     ];
 
-    const searchParams = useSearchParams();
-    const currentPage = parseInt(searchParams.get("page") || "1", 10);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const pageParam = url.searchParams.get("page");
+        const page = pageParam ? parseInt(pageParam, 10) : 1;
+        setCurrentPage(page);
+    }, []);
 
     const filteredCourses = hardcodedCourses.filter((course) => {
         let matches = true;
@@ -71,10 +77,18 @@ export default function ExploreContent({
 
     const totalCourses = filteredCourses.length;
     const lastPage = Math.ceil(totalCourses / ITEMS_PER_PAGE);
+
     const paginatedCourses = filteredCourses.slice(
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", newPage.toString());
+        window.history.pushState({}, "", url);
+    };
 
     return (
         <div className="grid grid-rows-[1fr_auto] w-full min-h-screen">
@@ -90,9 +104,7 @@ export default function ExploreContent({
                                     instructor={course.instructor}
                                     rating={course.rating}
                                     imageSrc={course.imageSrc}
-                                    isLowVisionFriendly={
-                                        course.isLowVisionFriendly
-                                    }
+                                    isLowVisionFriendly={course.isLowVisionFriendly}
                                     category={course.category}
                                 />
                             </li>
@@ -111,6 +123,7 @@ export default function ExploreContent({
                 <PaginationClient
                     last_page={lastPage}
                     current_page={currentPage}
+                    onPageChange={handlePageChange} 
                 />
             </div>
         </div>
