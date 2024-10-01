@@ -3,7 +3,10 @@ import CourseCard from "@/components/course-card";
 import { Button } from "@/components/ui/button";
 import ReviewCard from "@/components/review-card";
 import { Course } from "@/app/type";
-import { getPopularReview, getTailoredCourse } from "@/app/actions/home-action";
+import {
+    getPopularReview,
+    getTailoredCourse,
+} from "@/app/actions/guest/home-action";
 import {
     Carousel,
     CarouselContent,
@@ -11,6 +14,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default async function Home() {
     const popularReviews = await getPopularReview();
@@ -39,7 +43,9 @@ export default async function Home() {
                                 mendukung pertumbuhan pribadi, pengembangan
                                 keterampilan, dan kesuksesan karier.
                             </p>
-                            <Button className="w-32">Jelajah Kursus</Button>
+                            <Link href="/explore">
+                                <Button className="w-32">Jelajah Kursus</Button>
+                            </Link>
                         </div>
 
                         <div className="flex justify-center md:justify-end items-center h-full">

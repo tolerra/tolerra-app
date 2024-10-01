@@ -19,7 +19,6 @@ export async function getPopularReview(): Promise<Review[]> {
         const response = await axios.get<Review[]>(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/courses/ratings/top-reviews`
         );
-        console.log("API Response:", response.data);
         return response.data;
     } catch (error) {
         console.error("error:", error);
