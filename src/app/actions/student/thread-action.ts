@@ -27,3 +27,20 @@ export async function getThreadById(
         return null;
     }
 }
+
+export async function addThread(threadData: {
+    category_id: number;
+    user_id: number;
+    content: string;
+}) {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/threads`,
+            threadData
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error creating new thread:", error);
+        throw error;
+    }
+}
