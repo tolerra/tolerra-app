@@ -5,9 +5,7 @@ interface CourseCardProps {
     id: number;
     name: string;
     instructor_name: string;
-    price: number;
-    image: string;
-    average_rating: number;
+    average_rating: string;
     isDashboard: boolean;
 }
 
@@ -15,7 +13,6 @@ export default function CourseCard({
     id,
     name,
     instructor_name,
-    image,
     average_rating,
     isDashboard,
 }: CourseCardProps) {
@@ -27,7 +24,7 @@ export default function CourseCard({
                 className="bg-white shadow-md p-2 transform transition duration-500 hover:bg-secondary hover:shadow-xl w-full max-w-xs"
             >
                 <Image
-                    src={image}
+                    src={"/assets/homepage/temp-course-adobe.png"}
                     alt={name}
                     width={300}
                     height={170}
