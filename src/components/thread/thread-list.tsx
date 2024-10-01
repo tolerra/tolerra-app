@@ -1,7 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PaginationClient from "@/components/pagination-client";
 import Thread from "@/components/thread/thread";
 
@@ -41,13 +40,7 @@ const threadData = [
 ];
 
 export default function ThreadList() {
-  const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    setCurrentPage(page);
-  }, [searchParams]);
 
   const totalThreads = threadData.length;
   const lastPage = Math.ceil(totalThreads / ITEMS_PER_PAGE);
@@ -56,6 +49,10 @@ export default function ThreadList() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 w-full max-w-4xl">
@@ -72,7 +69,12 @@ export default function ThreadList() {
       ) : (
         <p className="text-center text-gray-500">No discussions available.</p>
       )}
-      <PaginationClient current_page={currentPage} last_page={lastPage} />
+
+      <PaginationClient
+        current_page={currentPage}
+        last_page={lastPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

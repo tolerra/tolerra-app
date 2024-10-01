@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import {
     Pagination,
     PaginationContent,
@@ -7,27 +8,27 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearchParams, useRouter } from "next/navigation";
 
 interface PaginationClientProps {
     last_page: number;
     current_page: number;
+    onPageChange: (page: number) => void;  // Include the onPageChange prop
 }
 
 export default function PaginationClient({
     last_page,
     current_page,
+    onPageChange,  // Destructure onPageChange
 }: PaginationClientProps) {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+    const [page, setPage] = useState(current_page);
 
-    const handlePageChange = (page: number) => {
-        const params = new URLSearchParams(searchParams.toString());
+    useEffect(() => {
+        setPage(current_page);
+    }, [current_page]);
 
-        // Set the new page parameter while retaining other search parameters
-        params.set("page", page.toString());
-
-        router.push(`?${params.toString()}`);
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+        onPageChange(newPage);  // Call the parent-provided handler
     };
 
     return (
@@ -35,38 +36,34 @@ export default function PaginationClient({
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
-                        onClick={() =>
-                            handlePageChange(Math.max(1, current_page - 1))
+                        onClick={
+                            page === 1
+                                ? undefined
+                                : () => handlePageChange(page - 1)
                         }
-                        className={
-                            current_page === 1
-                                ? "pointer-events-none opacity-50"
-                                : ""
-                        }
+                        className={page === 1 ? "opacity-50 cursor-not-allowed" : ""}
                     />
                 </PaginationItem>
-                {[...Array(last_page)].map((_, index) => (
+
+                {Array.from({ length: last_page }, (_, index) => (
                     <PaginationItem key={index}>
                         <PaginationLink
+                            isActive={page === index + 1}
                             onClick={() => handlePageChange(index + 1)}
-                            isActive={current_page === index + 1}
                         >
                             {index + 1}
                         </PaginationLink>
                     </PaginationItem>
                 ))}
+
                 <PaginationItem>
                     <PaginationNext
-                        onClick={() =>
-                            handlePageChange(
-                                Math.min(last_page, current_page + 1)
-                            )
+                        onClick={
+                            page === last_page
+                                ? undefined
+                                : () => handlePageChange(page + 1)
                         }
-                        className={
-                            current_page === last_page
-                                ? "pointer-events-none opacity-50"
-                                : ""
-                        }
+                        className={page === last_page ? "opacity-50 cursor-not-allowed" : ""}
                     />
                 </PaginationItem>
             </PaginationContent>
