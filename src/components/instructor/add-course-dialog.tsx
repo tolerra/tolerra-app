@@ -11,10 +11,24 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import {
-    CourseDialog,
-    CourseDialogProps,
-} from "@/components/instructor/hooks/use-dashboard-manager";
+
+export interface CourseDialog {
+    id: number;
+    title: string;
+    description: string;
+    difficulty?: string;
+    syllabus?: string;
+    image?: string;
+}
+
+export interface CourseDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    course: CourseDialog | null;
+    onAddCourse: (course: Omit<CourseDialog, "id">) => void;
+    onEditCourse: (editedCourse: CourseDialog) => void;
+    onDeleteCourse: (courseId: number) => void;
+}
 
 type AddCourseDialogProps = Pick<
     CourseDialogProps,

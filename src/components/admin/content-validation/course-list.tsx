@@ -1,4 +1,4 @@
-"use client";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,75 +9,147 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Course } from "@/components/admin/hooks/use-dashboard-manager";
-import { useState } from "react";
+import ValidateDialog from "@/components/admin/validate-dialog";
 
-interface CourseListProps {
-    courses: Course[];
-    itemsPerPage: number;
-    onValidate: (course: Course) => void;
+interface Course {
+    id: number;
+    title: string;
+    name: string;
+    date: string;
+    status: string;
 }
 
-export default function CourseList({
-    courses,
-    itemsPerPage,
-    onValidate,
-}: CourseListProps) {
-    const [coursePage, setCoursePage] = useState(1);
-    const totalCoursePages = Math.ceil(courses.length / itemsPerPage);
-    const currentCourses = courses.slice(
-        (coursePage - 1) * itemsPerPage,
-        coursePage * itemsPerPage
+export default function CourseValidation() {
+    const itemsPerPage = 3;
+    const [courseData, setCourseData] = useState<Course[]>([
+        {
+            id: 1,
+            title: "Adobe Photoshop: Introduction to Photoshop",
+            name: "Kim Lee",
+            date: "July 27, 2024",
+            status: "Pending",
+        },
+        {
+            id: 2,
+            title: "Adobe Photoshop: Layers and Masks",
+            name: "Kim Jong",
+            date: "July 27, 2024",
+            status: "Pending",
+        },
+        {
+            id: 3,
+            title: "Adobe Photoshop: Advanced Editing",
+            name: "Kim Kir",
+            date: "July 28, 2024",
+            status: "Pending",
+        },
+        {
+            id: 4,
+            title: "Adobe Photoshop: Color Correction",
+            name: "Kim Soo",
+            date: "July 29, 2024",
+            status: "Completed",
+        },
+    ]);
+
+    const [page, setPage] = useState(1);
+    const totalPages = Math.ceil(courseData.length / itemsPerPage);
+    const currentData = courseData.slice(
+        (page - 1) * itemsPerPage,
+        page * itemsPerPage
     );
 
+    const [isValidateDialogOpen, setIsValidateDialogOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Course | null>(null);
+
+    const handleAccept = (id: number) => {
+        setCourseData((prevData) =>
+            prevData.map((course) =>
+                course.id === id ? { ...course, status: "Completed" } : course
+            )
+        );
+        setIsValidateDialogOpen(false);
+    };
+
+    const handleDeny = (id: number) => {
+        setCourseData((prevData) =>
+            prevData.filter((course) => course.id !== id)
+        );
+        setIsValidateDialogOpen(false);
+    };
+
     return (
-        <div>
-            {currentCourses.map((course) => (
-                <Card key={course.id} className="mb-5">
+        <>
+            {currentData.map((courseItem) => (
+                <Card key={courseItem.id} className="mb-5">
                     <CardContent className="flex flex-col md:flex-row justify-between items-center p-4">
-                        <div className="text-center md:text-left">
-                            <div className="text-lg font-semibold">
-                                {course.title}
+                        <div className="items-center text-center md:items-start md:text-left mb-4 md:mb-0">
+                            <div className="text-[16px] font-semibold mb-2">
+                                {courseItem.title}
                             </div>
-                            <div className="text-sm text-gray-500">
-                                {course.date}
+                            <div className="text-[15px] text-[#A2A2A2] mb-2">
+                                {courseItem.name}
+                            </div>
+                            <div className="text-[13px] text-gray-500 mb-2">
+                                {courseItem.date}
                             </div>
                             <span
-                                className={`px-2 py-1 rounded-md text-xs ${course.status === "Pending" ? "bg-yellow-100 text-yellow-600" : "bg-green-100 text-green-600"}`}
+                                className={`px-2 py-1 rounded-md text-xs inline-block ${courseItem.status === "Pending" ? "bg-yellow-100 text-yellow-600" : "bg-green-100 text-green-600"}`}
                             >
-                                {course.status}
+                                {courseItem.status}
                             </span>
                         </div>
-                        <div className="flex justify-center md:justify-end space-x-2">
-                            <Button variant="outline">Details</Button>
-                            <Button onClick={() => onValidate(course)}>
+                        <div className="flex justify-center md:justify-end items-center space-x-2">
+                            <Button
+                                className="w-full md:w-auto text-center"
+                                variant={"outline"}
+                            >
+                                Details
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setSelectedItem(courseItem);
+                                    setIsValidateDialogOpen(true);
+                                }}
+                            >
                                 Validate
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
             ))}
+            <ValidateDialog
+                isOpen={isValidateDialogOpen}
+                onClose={() => setIsValidateDialogOpen(false)}
+                onAccept={() => {
+                    if (selectedItem?.id !== undefined) {
+                        handleAccept(selectedItem.id);
+                    }
+                }}
+                onDeny={() => {
+                    if (selectedItem?.id !== undefined) {
+                        handleDeny(selectedItem.id);
+                    }
+                }}
+                name={selectedItem?.title || ""}
+                type="course"
+            />
+            {/* Pagination */}
             <Pagination className="mt-5">
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
                             onClick={
-                                coursePage > 1
-                                    ? () => setCoursePage(coursePage - 1)
-                                    : undefined
+                                page === 1 ? undefined : () => setPage(page - 1)
                             }
-                            className={
-                                coursePage === 1
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : ""
-                            }
+                            className={`${page === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                         />
                     </PaginationItem>
-                    {Array.from({ length: totalCoursePages }, (_, i) => (
+                    {Array.from({ length: totalPages }, (_, i) => (
                         <PaginationItem key={i}>
                             <PaginationLink
-                                isActive={coursePage === i + 1}
-                                onClick={() => setCoursePage(i + 1)}
+                                isActive={page === i + 1}
+                                onClick={() => setPage(i + 1)}
                             >
                                 {i + 1}
                             </PaginationLink>
@@ -86,19 +158,15 @@ export default function CourseList({
                     <PaginationItem>
                         <PaginationNext
                             onClick={
-                                coursePage < totalCoursePages
-                                    ? () => setCoursePage(coursePage + 1)
-                                    : undefined
+                                page === totalPages
+                                    ? undefined
+                                    : () => setPage(page + 1)
                             }
-                            className={
-                                coursePage === totalCoursePages
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : ""
-                            }
+                            className={`${page === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
                         />
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>
-        </div>
+        </>
     );
 }

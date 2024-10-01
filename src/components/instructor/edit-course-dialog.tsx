@@ -12,9 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-    CourseDialog,
     CourseDialogProps,
-} from "@/components/instructor/hooks/use-dashboard-manager";
+    CourseDialog,
+} from "@/components/instructor/add-course-dialog";
 
 type EditCourseDialogProps = Pick<
     CourseDialogProps,

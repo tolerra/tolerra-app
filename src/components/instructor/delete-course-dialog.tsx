@@ -6,7 +6,7 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CourseDialogProps } from "@/components/instructor/hooks/use-dashboard-manager";
+import { CourseDialogProps } from "@/components/instructor/add-course-dialog";
 
 type DeleteCourseDialogProps = Pick<
     CourseDialogProps,
@@ -33,9 +33,9 @@ export default function DeleteCourseDialog({
                     <DialogTitle>Delete Course</DialogTitle>
                 </DialogHeader>
                 <p>
-                    Are you sure you want to delete the course &quot;
+                    Are you sure you want to delete the course &quot
                     {course?.title}
-                    &quot;?
+                    &quot?
                 </p>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
