@@ -104,7 +104,9 @@ export default function ExploreContent({
                                     instructor={course.instructor}
                                     rating={course.rating}
                                     imageSrc={course.imageSrc}
-                                    isLowVisionFriendly={course.isLowVisionFriendly}
+                                    isLowVisionFriendly={
+                                        course.isLowVisionFriendly
+                                    }
                                     category={course.category}
                                 />
                             </li>
@@ -123,7 +125,7 @@ export default function ExploreContent({
                 <PaginationClient
                     last_page={lastPage}
                     current_page={currentPage}
-                    onPageChange={handlePageChange} 
+                    onPageChange={handlePageChange}
                 />
             </div>
         </div>

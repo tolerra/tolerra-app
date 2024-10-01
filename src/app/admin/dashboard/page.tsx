@@ -1,5 +1,5 @@
 import React from "react";
-import Dashboard from "@/components/admin/dashboard-useracc-chapvalid";
+import Dashboard from "@/components/admin/dashboard-validation";
 
 export default async function Db() {
     return (

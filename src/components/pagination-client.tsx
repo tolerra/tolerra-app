@@ -12,13 +12,13 @@ import {
 interface PaginationClientProps {
     last_page: number;
     current_page: number;
-    onPageChange: (page: number) => void;  // Include the onPageChange prop
+    onPageChange: (page: number) => void; // Include the onPageChange prop
 }
 
 export default function PaginationClient({
     last_page,
     current_page,
-    onPageChange,  // Destructure onPageChange
+    onPageChange, // Destructure onPageChange
 }: PaginationClientProps) {
     const [page, setPage] = useState(current_page);
 
@@ -28,7 +28,7 @@ export default function PaginationClient({
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
-        onPageChange(newPage);  // Call the parent-provided handler
+        onPageChange(newPage); // Call the parent-provided handler
     };
 
     return (
@@ -41,7 +41,9 @@ export default function PaginationClient({
                                 ? undefined
                                 : () => handlePageChange(page - 1)
                         }
-                        className={page === 1 ? "opacity-50 cursor-not-allowed" : ""}
+                        className={
+                            page === 1 ? "opacity-50 cursor-not-allowed" : ""
+                        }
                     />
                 </PaginationItem>
 
@@ -63,7 +65,11 @@ export default function PaginationClient({
                                 ? undefined
                                 : () => handlePageChange(page + 1)
                         }
-                        className={page === last_page ? "opacity-50 cursor-not-allowed" : ""}
+                        className={
+                            page === last_page
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                        }
                     />
                 </PaginationItem>
             </PaginationContent>

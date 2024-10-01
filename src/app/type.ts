@@ -32,3 +32,23 @@ export interface ValidationErrorResponse {
     message: string;
     errors?: Record<string, string[]>;
 }
+
+export interface Thread {
+    id: number;
+    category_id: number;
+    user_id: number;
+    content: string;
+    created_at: string;
+}
+
+export interface Comment {
+    id: number;
+    thread_id: number;
+    content: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ThreadWithComments extends Thread {
+    comments: Comment[];
+}
