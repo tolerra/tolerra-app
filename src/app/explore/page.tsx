@@ -1,3 +1,5 @@
+import getAllCourse from "@/app/actions/guest/explore-action";
+
 export const dynamic = "force-dynamic";
 import SearchBar from "@/components/explore/search-bar";
 import ExploreContent from "@/components/explore/explore-content";
@@ -26,6 +28,8 @@ export default async function Explore({ searchParams }: ExploreProps) {
     };
 
     const data = uniqueCategory.data;
+    const allCourse = getAllCourse();
+    console.log(allCourse);
 
     return (
         <div className="grid grid-rows-[auto_1fr] min-h-screen w-full pt-8 pb-8">
