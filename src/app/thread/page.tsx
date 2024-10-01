@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import PaginationClient from "@/components/pagination-client";
@@ -62,29 +61,31 @@ export default function ThreadPage() {
   );
 
   return (
-    <div className="min-h-[85vh] flex flex-col justify-between">
-      <main className="flex-grow flex flex-col justify-start items-center p-6 space-y-8 mt-12">
-        <h1 className="text-3xl font-medium text-center">Discussions</h1>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="min-h-[85vh] flex flex-col justify-between">
+        <main className="flex-grow flex flex-col justify-start items-center p-6 space-y-8 mt-12">
+          <h1 className="text-3xl font-medium text-center">Discussions</h1>
 
-        <div className="grid grid-cols-1 gap-4 w-full max-w-4xl">
-          {paginatedThreads.length > 0 ? (
-            paginatedThreads.map((thread, index) => (
-              <Thread
-                key={index}
-                id={(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
-                title={thread.title}
-                date={thread.date}
-                description={thread.description}
-              />
-            ))
-          ) : (
-            <p className="text-center text-gray-500">No discussions available.</p>
-          )}
-        </div>
-      </main>
-      <div className="w-full max-w-4xl mx-auto mb-4">
+          <div className="grid grid-cols-1 gap-4 w-full max-w-4xl">
+            {paginatedThreads.length > 0 ? (
+              paginatedThreads.map((thread, index) => (
+                <Thread
+                  key={index}
+                  id={(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                  title={thread.title}
+                  date={thread.date}
+                  description={thread.description}
+                />
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No discussions available.</p>
+            )}
+          </div>
+        </main>
+        <div className="w-full max-w-4xl mx-auto mb-4">
           <PaginationClient current_page={currentPage} last_page={lastPage} />
         </div>
-    </div>
+      </div>
+    </Suspense>
   );
 }
