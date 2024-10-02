@@ -1,3 +1,4 @@
+// components/instructor/CourseDetailManagement.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -60,101 +61,70 @@ async function updateCourse(
     if (!response.ok) {
         throw new Error("Failed to update course");
     }
-    return response.json();
 }
 
-export default function CourseDetailPage({
-    params,
+export default function CourseDetailManagement({
+    courseId,
 }: {
-    params: { id: string };
+    courseId: string;
 }) {
-    const router = useRouter();
-    const courseId = params.id;
-    const [courseDetails, setCourseDetails] = useState<CourseDialog | null>(
-        null
-    );
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [course, setCourse] = useState<CourseDialog | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
-        const fetchCourseDetails = async () => {
-            try {
-                const details = await getCourseDetails(courseId);
-                setCourseDetails(details);
-            } catch {
-                setError("Failed to load course details.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
+        async function fetchCourseDetails() {
+            const courseDetails = await getCourseDetails(courseId);
+            setCourse(courseDetails);
+        }
         fetchCourseDetails();
     }, [courseId]);
 
-    const handleDeleteCourse = async (courseId: number) => {
-        try {
-            await deleteCourse(courseId.toString());
-            router.push("/courses");
-        } catch {
-            setError("Failed to delete course.");
-        } finally {
-            setIsDeleteDialogOpen(false);
-        }
+    const handleUpdateCourse = (updatedCourse: CourseDialog) => {
+        updateCourse(courseId, updatedCourse)
+            .then(() => {
+                setCourse(updatedCourse);
+                setIsEditDialogOpen(false);
+            })
+            .catch((error) => {
+                console.error("Error updating course:", error);
+            });
     };
 
-    const handleEditCourse = async (editedCourse: CourseDialog) => {
-        try {
-            const updatedCourse = await updateCourse(courseId, editedCourse);
-            setCourseDetails(updatedCourse);
-            setIsEditDialogOpen(false);
-        } catch {
-            setError("Failed to update course.");
-        }
+    const handleDeleteCourse = () => {
+        deleteCourse(courseId)
+            .then(() => {
+                setIsDeleteDialogOpen(false);
+                router.push("/instructor/dashboard");
+            })
+            .catch((error) => {
+                console.error("Error deleting course:", error);
+            });
     };
 
-    if (loading) {
+    if (!course) {
         return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    if (!courseDetails) {
-        return <div>Course not found.</div>;
     }
 
     return (
         <div>
-            <h1 className="text-2xl font-bold">{courseDetails.title}</h1>
-            <p className="mt-2">{courseDetails.description}</p>
-            <div className="flex justify-end space-x-4 mt-4">
-                <button
-                    onClick={() => setIsEditDialogOpen(true)}
-                    className="bg-blue-500 text-white px-8 py-2 rounded"
-                >
-                    Edit
-                </button>
-                <button
-                    onClick={() => setIsDeleteDialogOpen(true)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                >
-                    Delete
-                </button>
-            </div>
+            <h1>{course.title}</h1>
+            <p>{course.description}</p>
+
+            <button onClick={() => setIsEditDialogOpen(true)}>Edit</button>
+            <button onClick={() => setIsDeleteDialogOpen(true)}>Delete</button>
 
             <EditCourseDialog
                 isOpen={isEditDialogOpen}
                 onClose={() => setIsEditDialogOpen(false)}
-                course={courseDetails}
-                onEditCourse={handleEditCourse}
+                course={course}
+                onEditCourse={handleUpdateCourse}
             />
             <DeleteCourseDialog
                 isOpen={isDeleteDialogOpen}
                 onClose={() => setIsDeleteDialogOpen(false)}
-                course={courseDetails}
+                course={course}
                 onDeleteCourse={handleDeleteCourse}
             />
         </div>
