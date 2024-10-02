@@ -6,69 +6,69 @@ import { redirect } from "next/navigation";
 
 export async function signIn(email: string, password: string) {
     try {
-        // Fetch CSRF token
-        const csrfToken = await getCsrfToken();
-        if (!csrfToken) {
-            return { success: false, error: "Failed to fetch CSRF token" };
-        }
-
         const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
             { email, password },
             {
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-                withCredentials: true, // Required to send cookies
+                withCredentials: true,
             }
         );
 
-        const data = response.data;
-        const expires = new Date(Date.now() + 60 * 60 * 24 * 1000); // 24 hours
+        const { token, user } = response.data;
 
-        document.cookie = `token=${data.token}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
-        document.cookie = `user=${JSON.stringify(data.user)}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
+        // Set cookies
+        cookies().set("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== "development",
+            sameSite: "strict",
+            maxAge: 60 * 60 * 24, // 24 hours
+            path: "/",
+        });
 
-        return { success: true };
-    } catch (error: unknown) {
+        cookies().set(
+            "user",
+            JSON.stringify({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            }),
+            {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== "development",
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24, // 24 hours
+                path: "/",
+            }
+        );
+
+        return { success: true, user: user };
+    } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             return {
                 success: false,
-                error: error.response.data.message || "An error occurred",
+                error: error.response.data.message || "Invalid credentials",
             };
         }
         return { success: false, error: "An unexpected error occurred" };
     }
 }
 
-export async function SignUp(
-    name: string,
-    email: string,
-    password: string,
-    role: string,
-    disabilityCard?: File
-) {
+export async function SignUp(signupData: {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+    role: string;
+    disability_card?: string | null | undefined;
+}) {
     try {
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("email", email);
-        formData.append("password", password);
-        formData.append("password_confirmation", password);
-        formData.append("role", role);
-        if (disabilityCard) {
-            formData.append("disability_card", disabilityCard);
-        }
-
-        const csrfToken = await getCsrfToken();
-        console.log(csrfToken);
-
         const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/register/${role}`,
-            formData,
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/register/${signupData.role}`,
+            signupData,
             {
                 headers: {
-                    "Content-Type": "multipart/form-data",
-                    "X-CSRF-TOKEN": csrfToken,
+                    "Content-Type": "application/json",
                 },
                 withCredentials: true,
             }
@@ -77,9 +77,22 @@ export async function SignUp(
         if (response.status === 201) {
             const { user } = response.data;
 
-            const expires = new Date(Date.now() + 60 * 60 * 24 * 1000); // 24 hours
-            document.cookie = `token=${response.data.token}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
-            document.cookie = `user=${JSON.stringify(user)}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
+            // Set cookies
+            cookies().set("token", response.data.token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== "development",
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24, // 24 hours
+                path: "/",
+            });
+
+            cookies().set("user", JSON.stringify(user), {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== "development",
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24, // 24 hours
+                path: "/",
+            });
         }
 
         return { success: true, data: response.data };
@@ -163,4 +176,35 @@ export async function getUserData() {
     }
 
     return JSON.parse(userCookie.value);
+}
+
+export async function fetchUserProfile() {
+    const userId = await getUserId();
+    if (!userId) {
+        return null;
+    }
+
+    try {
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}/profile`,
+            {
+                headers: {
+                    Authorization: `Bearer ${cookies().get("token")?.value}`,
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        return null;
+    }
+}
+
+export async function checkDisabilityVerification(): Promise<boolean> {
+    const profile = await fetchUserProfile();
+    if (!profile) {
+        return false;
+    }
+    return profile.disability_verification;
 }
