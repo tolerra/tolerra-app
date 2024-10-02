@@ -91,11 +91,6 @@ export default function CourseManagement() {
                             <p className="text-sm text-gray-600">
                                 {course.description}
                             </p>
-                            {course.difficulty && (
-                                <p className="text-sm text-gray-500">
-                                    Difficulty : {course.difficulty}
-                                </p>
-                            )}
                         </div>
 
                         <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto mt-4 md:mt-0 justify-center">

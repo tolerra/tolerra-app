@@ -22,7 +22,7 @@ export default function CourseItem({
     return (
         <Link href={`/course-detail/${id}`} passHref>
             <Card>
-                <CardContent className="h-[243px]">
+                <CardContent className="my-auto">
                     <img
                         src={imageUrl}
                         alt={`${title} thumbnail`}
