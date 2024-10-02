@@ -35,15 +35,13 @@ export default function Dashboard() {
                     </TabsList>
                 </div>
 
-                <div className="mt-6">
-                    <TabsContent value="account">
-                        <AccountValidation />
-                    </TabsContent>
+                <TabsContent value="account">
+                    <AccountValidation />
+                </TabsContent>
 
-                    <TabsContent value="course">
-                        <CourseValidation />
-                    </TabsContent>
-                </div>
+                <TabsContent value="course">
+                    <CourseValidation />
+                </TabsContent>
             </Tabs>
         </div>
     );
