@@ -123,7 +123,6 @@ export default function AccountValidation() {
                     </CardContent>
                 </Card>
             ))}
-            {/* Pagination */}
             <Pagination className="mt-5">
                 <PaginationContent>
                     <PaginationItem>

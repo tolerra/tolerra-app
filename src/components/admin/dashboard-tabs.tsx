@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import AccountValidation from "@/components/admin/content-validation/account-list";
 import CourseValidation from "@/components/admin/content-validation/course-list";
 
-export default function DashboardTabs() {
+export default function Dashboard() {
     const [activeTab, setActiveTab] = useState("account");
 
     return (

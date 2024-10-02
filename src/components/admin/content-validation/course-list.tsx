@@ -9,7 +9,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
-import ValidateDialog from "@/components/admin/validate-dialog";
+import ValidateDialog from "@/components/admin/content-validation/validate-dialog";
 
 interface Course {
     id: number;
@@ -134,7 +134,6 @@ export default function CourseValidation() {
                 name={selectedItem?.title || ""}
                 type="course"
             />
-            {/* Pagination */}
             <Pagination className="mt-5">
                 <PaginationContent>
                     <PaginationItem>
