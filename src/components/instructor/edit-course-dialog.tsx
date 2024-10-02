@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
     CourseDialogProps,
     CourseDialog,
-} from "@/app/instructor/dashboard/course/[id]/page";
+} from "@/components/instructor/course-management/course-detail";
 
 type EditCourseDialogProps = Pick<
     CourseDialogProps,

@@ -6,7 +6,7 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CourseDialogProps } from "@/app/instructor/dashboard/course/[id]/page";
+import { CourseDialogProps } from "@/components/instructor/course-management/course-detail";
 
 type DeleteCourseDialogProps = Pick<
     CourseDialogProps,

@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import {
     CourseDialogProps,
     CourseDialog,
-} from "@/app/instructor/dashboard/course/[id]/page";
+} from "@/components/instructor/course-management/course-detail";
 
 type AddCourseDialogProps = Pick<
     CourseDialogProps,
