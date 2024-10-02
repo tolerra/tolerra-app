@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/app/actions/auth/auth-action";
+import toast from "react-hot-toast";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -25,7 +26,8 @@ export default function SignIn() {
         e.preventDefault();
         const result = await signIn(email, password);
         if (result.success) {
-            router.push("/dashboard"); // Redirect to dashboard on success
+            toast.success("Signed in successfully!");
+            router.push("/");
         } else {
             setError(result.error || "An error occurred");
         }

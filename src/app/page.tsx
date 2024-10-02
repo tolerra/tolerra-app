@@ -154,9 +154,11 @@ export default async function Home() {
                                 dan ajarkan apa yang Anda sukai demi misi
                                 sosial!
                             </p>
-                            <Button className="w-36 mx-auto md:mx-0">
-                                Mulai Sekarang
-                            </Button>
+                            <Link href="/auth/sign-up">
+                                <Button className="w-36 mx-auto md:mx-0">
+                                    Mulai Sekarang
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
