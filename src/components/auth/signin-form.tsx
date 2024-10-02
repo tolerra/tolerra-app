@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -10,10 +11,26 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/app/actions/auth/auth-action";
 
 export default function SignIn() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const result = await signIn(email, password);
+        if (result.success) {
+            router.push("/dashboard"); // Redirect to dashboard on success
+        } else {
+            setError(result.error || "An error occurred");
+        }
+    };
+
     return (
         <Card className="w-[500px]">
             <CardHeader>
@@ -22,7 +39,7 @@ export default function SignIn() {
                 </CardTitle>
             </CardHeader>
             <CardContent className="max-w-md w-full mx-auto items-center">
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <Label
                             htmlFor="email"
@@ -33,8 +50,11 @@ export default function SignIn() {
                         <Input
                             type="email"
                             id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 bg-gray-100 text-black"
                             placeholder="Masukkan Email"
+                            required
                         />
                     </div>
                     <div>
@@ -47,10 +67,14 @@ export default function SignIn() {
                         <Input
                             type="password"
                             id="password"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 bg-gray-100 text-black mb-36"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 bg-gray-100 text-black mb-8"
                             placeholder="Masukkan Kata Sandi"
+                            required
                         />
                     </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                     <div className="pt-4">
                         <Button
                             type="submit"

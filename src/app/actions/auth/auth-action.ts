@@ -2,42 +2,42 @@
 
 import { cookies } from "next/headers";
 import axios from "axios";
-import { AxiosError } from "axios";
-import { ValidationErrorResponse } from "@/app/type";
 import { redirect } from "next/navigation";
 
-const baseUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}`;
-
-export async function SignIn(email: string, password: string) {
+export async function signIn(email: string, password: string) {
     try {
-        const response = await axios.post(`${baseUrl}/login`, {
-            email,
-            password,
-        });
+        // Fetch CSRF token
+        const csrfToken = await getCsrfToken();
+        if (!csrfToken) {
+            return { success: false, error: "Failed to fetch CSRF token" };
+        }
+
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
+            { email, password },
+            {
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                withCredentials: true, // Required to send cookies
+            }
+        );
 
         const data = response.data;
-        const expires = new Date(Date.now() + 60 * 60 * 24 * 1000);
+        const expires = new Date(Date.now() + 60 * 60 * 24 * 1000); // 24 hours
 
-        cookies().set("token", data.token, {
-            secure: true,
-            httpOnly: true,
-            expires: expires,
-        });
-
-        cookies().set("user", JSON.stringify(data.user), {
-            secure: true,
-            httpOnly: true,
-            expires: expires,
-        });
+        document.cookie = `token=${data.token}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
+        document.cookie = `user=${JSON.stringify(data.user)}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
 
         return { success: true };
     } catch (error: unknown) {
-        const err = error as AxiosError<ValidationErrorResponse>;
-        console.log("error:", err);
-        return {
-            success: false,
-            error: err.response?.data?.message || "An error occurred",
-        };
+        if (axios.isAxiosError(error) && error.response) {
+            return {
+                success: false,
+                error: error.response.data.message || "An error occurred",
+            };
+        }
+        return { success: false, error: "An unexpected error occurred" };
     }
 }
 
@@ -45,21 +45,54 @@ export async function SignUp(
     name: string,
     email: string,
     password: string,
-    role: string
+    role: string,
+    disabilityCard?: File
 ) {
     try {
-        await axios.post(`${baseUrl}/register/${role}`, {
-            name,
-            email,
-            password,
-        });
-        return { success: true };
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("password_confirmation", password);
+        formData.append("role", role);
+        if (disabilityCard) {
+            formData.append("disability_card", disabilityCard);
+        }
+
+        const csrfToken = await getCsrfToken();
+        console.log(csrfToken);
+
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/register/${role}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                withCredentials: true,
+            }
+        );
+
+        if (response.status === 201) {
+            const { user } = response.data;
+
+            const expires = new Date(Date.now() + 60 * 60 * 24 * 1000); // 24 hours
+            document.cookie = `token=${response.data.token}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
+            document.cookie = `user=${JSON.stringify(user)}; expires=${expires.toUTCString()}; path=/; secure; httpOnly`;
+        }
+
+        return { success: true, data: response.data };
     } catch (error: unknown) {
-        const err = error as AxiosError<ValidationErrorResponse>;
-        console.log("error:", err);
+        if (axios.isAxiosError(error) && error.response) {
+            return {
+                success: false,
+                error: error.response.data.message || "An error occurred",
+            };
+        }
         return {
             success: false,
-            error: err.response?.data?.message || "An error occured",
+            error: "An unexpected error occurred",
         };
     }
 }
@@ -94,18 +127,31 @@ export async function getUserId() {
     return user.id;
 }
 
-export async function getUserToken() {
-    const tokenCokkie = cookies().get("user");
+export async function getCsrfToken() {
+    try {
+        const response = await axios.get(
+            "https://tolerra-api-d4dd0087ff22.herokuapp.com/token",
+            {
+                withCredentials: true,
+            }
+        );
 
-    if (!tokenCokkie) {
+        const csrfToken = response.data.csrf_token;
+        if (csrfToken) {
+            console.log(csrfToken);
+            return csrfToken;
+        } else {
+            console.error("No CSRF token fetched");
+            return null;
+        }
+    } catch (error) {
+        console.error("Failed to fetch CSRF token:", error);
         return null;
     }
-
-    return tokenCokkie.value;
 }
 
 export async function isLoggedIn() {
-    const token = await getUserToken();
+    const token = await getCsrfToken();
     return !!token;
 }
 
