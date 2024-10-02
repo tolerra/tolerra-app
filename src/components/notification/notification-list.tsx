@@ -5,7 +5,7 @@ import PaginationClient from "@/components/pagination-client";
 
 const ITEMS_PER_PAGE = 5;
 
-const notifications = [
+export const notifications = [
     {
         id: 1,
         type: "New Enrollment",
@@ -58,39 +58,38 @@ const notifications = [
 
 export default function NotificationList() {
     const [currentPage, setCurrentPage] = useState(1);
-  
     const totalNotifications = notifications.length;
     const lastPage = Math.ceil(totalNotifications / ITEMS_PER_PAGE);
-  
+
     const displayedNotifications = notifications.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
     );
-  
+
     const handlePageChange = (page: number) => {
-      setCurrentPage(page);
+        setCurrentPage(page);
     };
-  
+
     return (
-      <div className="grid grid-cols-1 gap-2 px-6 py-6">
-        {displayedNotifications.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            id={notification.id}
-            type={notification.type}
-            template={notification.template}
-            userName={notification.userName}
-            courseName={notification.courseName}
-            chapterName={notification.chapterName}
-            time={notification.time}
-          />
-        ))}
-  
-        <PaginationClient
-          current_page={currentPage}
-          last_page={lastPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
+        <div className="grid grid-cols-1 gap-2 px-6 py-6">
+            {displayedNotifications.map((notification) => (
+                <NotificationItem
+                    key={notification.id}
+                    id={notification.id}
+                    type={notification.type}
+                    template={notification.template}
+                    userName={notification.userName}
+                    courseName={notification.courseName}
+                    chapterName={notification.chapterName}
+                    time={notification.time}
+                />
+            ))}
+
+            <PaginationClient
+                current_page={currentPage}
+                last_page={lastPage}
+                onPageChange={handlePageChange}
+            />
+        </div>
     );
 }
