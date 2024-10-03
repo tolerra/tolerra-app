@@ -6,8 +6,6 @@ interface NotificationItemProps {
     type: string;
     template: string;
     userName?: string;
-    courseName?: string;
-    chapterName?: string;
     time: string;
 }
 
@@ -16,14 +14,9 @@ export default function NotificationItem({
     type,
     template,
     userName,
-    courseName,
-    chapterName,
     time,
 }: NotificationItemProps) {
-    const formattedTemplate = template
-        .replace("[User Name]", userName || "")
-        .replace("[Course Name]", courseName || "")
-        .replace("[Chapter Name]", chapterName || "");
+    const formattedTemplate = template.replace("[User Name]", userName || "");
 
     const [isOpened, setIsOpened] = useState(false);
 
