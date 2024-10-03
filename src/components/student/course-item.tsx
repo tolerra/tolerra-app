@@ -23,7 +23,7 @@ export default function CourseItem({
         <Link href={`/course-detail/${id}`} passHref>
             <Card>
                 <CardContent className="my-auto">
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={`${title} thumbnail`}
                         className="w-full object-cover rounded-md mt-7"

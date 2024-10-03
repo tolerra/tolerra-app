@@ -1,5 +1,3 @@
-import exp from "node:constants";
-
 export interface Review {
     course_id: number;
     student_id: number;
