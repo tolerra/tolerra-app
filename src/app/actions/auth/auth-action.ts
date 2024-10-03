@@ -111,7 +111,7 @@ export async function SignUp(signupData: {
 }
 
 export async function signOut() {
-    cookies().delete("tokken");
+    cookies().delete("token");
     cookies().delete("user");
     redirect("/");
 }
@@ -140,31 +140,8 @@ export async function getUserId() {
     return user.id;
 }
 
-export async function getCsrfToken() {
-    try {
-        const response = await axios.get(
-            "https://tolerra-api-d4dd0087ff22.herokuapp.com/token",
-            {
-                withCredentials: true,
-            }
-        );
-
-        const csrfToken = response.data.csrf_token;
-        if (csrfToken) {
-            console.log(csrfToken);
-            return csrfToken;
-        } else {
-            console.error("No CSRF token fetched");
-            return null;
-        }
-    } catch (error) {
-        console.error("Failed to fetch CSRF token:", error);
-        return null;
-    }
-}
-
 export async function isLoggedIn() {
-    const token = await getCsrfToken();
+    const token = await getUserToken();
     return !!token;
 }
 
@@ -201,10 +178,19 @@ export async function fetchUserProfile() {
     }
 }
 
-export async function checkDisabilityVerification(): Promise<boolean> {
+export async function isDisabilityValidated(): Promise<boolean> {
     const profile = await fetchUserProfile();
     if (!profile) {
         return false;
     }
     return profile.disability_verification;
+}
+
+export async function getUserToken() {
+    const tokenCookie = cookies().get("token");
+    if (!tokenCookie) {
+        return null;
+    }
+
+    return tokenCookie.value;
 }

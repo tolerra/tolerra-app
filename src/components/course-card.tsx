@@ -40,6 +40,9 @@ export default function CourseCard({
                     <p className="font-semibold text-sm pb-1">
                         {average_rating}
                     </p>
+                    <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full w-max">
+                        Low Vision Friendly
+                    </span>
                     <p className="font-semibold text-sm"></p>
                 </div>
             </div>
