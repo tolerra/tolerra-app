@@ -13,12 +13,15 @@ export default function SearchBar() {
     const handleSearch = (e: FormEvent) => {
         e.preventDefault();
         const params = new URLSearchParams(searchParams.toString());
-
-        params.set("name", name);
-        params.set("page", "1");
-
+        if (name) {
+            params.set("name", name);
+            params.set("page", "1");
+        } else {
+            params.delete("name");
+        }
         router.push(`?${params.toString()}`);
     };
+    
 
     return (
         <div>

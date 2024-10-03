@@ -37,9 +37,14 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
 
     const addToUrl = (arr: Array<string | number>, param: string) => {
         const params = new URLSearchParams(searchParams.toString());
-        params.set(param, arr.join(","));
+        if (arr.length > 0) {
+            params.set(param, arr.join(",")); 
+        } else {
+            params.delete(param); 
+        }
         router.push(`?${params.toString()}`);
     };
+    
 
     const clearFilters = () => {
         setSelectedRatings([]);

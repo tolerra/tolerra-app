@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import LongCourseCard from "./long-course-card";
 import PaginationClient from "@/components/pagination-client";
 import { ExploreProps } from "@/app/explore/page";
+import getAllCourse from "@/app/actions/guest/explore-action";
+import { Course } from "@/app/type"; 
 
 const ITEMS_PER_PAGE = 4;
 
@@ -11,65 +13,37 @@ export default function ExploreContent({
 }: {
     courseSearchParams: ExploreProps["searchParams"];
 }) {
-    const hardcodedCourses = [
-        {
-            id: 1,
-            title: "Intro to JavaScript",
-            description:
-                "Learn JavaScript basics and start creating dynamic web applications.",
-            instructor: "John Smith",
-            rating: 2,
-            category: "Development",
-            imageSrc: "https://picsum.photos/223/120",
-            isLowVisionFriendly: true,
-        },
-        {
-            id: 2,
-            title: "Advanced React",
-            description: "Master React and build powerful web applications.",
-            instructor: "Jane Doe",
-            rating: 4.8,
-            category: "Development",
-            imageSrc: "https://picsum.photos/223/120",
-            isLowVisionFriendly: true,
-        },
-        {
-            id: 3,
-            title: "Marketing Fundamentals",
-            description: "Learn the core principles of marketing.",
-            instructor: "Sarah Lee",
-            rating: 3.5,
-            category: "Business",
-            imageSrc: "https://picsum.photos/223/120",
-            isLowVisionFriendly: true,
-        },
-    ];
-
+    const [courses, setCourses] = useState<Course[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const url = new URL(window.location.href);
-        const pageParam = url.searchParams.get("page");
-        const page = pageParam ? parseInt(pageParam, 10) : 1;
-        setCurrentPage(page);
-    }, []);
+        const fetchCourses = async () => {
+            const allCourses = await getAllCourse(); 
+            setCourses(allCourses);
+        };
 
-    const filteredCourses = hardcodedCourses.filter((course) => {
+        fetchCourses();
+
+        const pageParam = courseSearchParams?.page || "1";
+        setCurrentPage(parseInt(pageParam, 10));
+    }, [courseSearchParams]);
+
+    const filteredCourses = courses.filter((course) => {
         let matches = true;
         if (courseSearchParams?.name) {
-            matches = course.title
+            matches = course.name
                 .toLowerCase()
                 .includes(courseSearchParams.name.toLowerCase());
         }
         if (courseSearchParams?.min_rating) {
             matches =
                 matches &&
-                course.rating >= parseFloat(courseSearchParams.min_rating);
+                parseFloat(course.average_rating) >= parseFloat(courseSearchParams.min_rating);
         }
         if (courseSearchParams?.category) {
             matches =
                 matches &&
-                course.category.toLowerCase() ===
+                course.category_name.toLowerCase() ===
                     courseSearchParams.category.toLowerCase();
         }
         return matches;
@@ -85,9 +59,9 @@ export default function ExploreContent({
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
-        const url = new URL(window.location.href);
-        url.searchParams.set("page", newPage.toString());
-        window.history.pushState({}, "", url);
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", newPage.toString());
+        window.history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
     };
 
     return (
@@ -99,15 +73,13 @@ export default function ExploreContent({
                             <li key={course.id} className="w-full">
                                 <LongCourseCard
                                     id={course.id}
-                                    title={course.title}
-                                    description={course.description}
-                                    instructor={course.instructor}
-                                    rating={course.rating}
-                                    imageSrc={course.imageSrc}
-                                    isLowVisionFriendly={
-                                        course.isLowVisionFriendly
-                                    }
-                                    category={course.category}
+                                    title={course.name}
+                                    description={course.brief}
+                                    instructor={course.instructor_name} 
+                                    rating={parseFloat(course.average_rating) || 0} 
+                                    imageSrc={course.image || "https://picsum.photos/223/120"} //picsum placeholder
+                                    category={course.category_name} 
+                                    isLowVisionFriendly={true}                                    
                                 />
                             </li>
                         ))}
