@@ -9,7 +9,8 @@ export const notifications = [
     {
         id: 1,
         type: "New Enrollment",
-        template: "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
+        template:
+            "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
         userName: "Jane Doe",
         courseName: "Introduction to AI",
         time: "Just Now",
@@ -17,7 +18,8 @@ export const notifications = [
     {
         id: 2,
         type: "Chapter Validated",
-        template: "Your chapter, '[Chapter Name],' in the course '[Course Name]' has been successfully validated by the admin.",
+        template:
+            "Your chapter, '[Chapter Name],' in the course '[Course Name]' has been successfully validated by the admin.",
         courseName: "Advanced AI",
         chapterName: "Neural Networks",
         time: "20:22",
@@ -25,7 +27,8 @@ export const notifications = [
     {
         id: 3,
         type: "New Enrollment",
-        template: "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
+        template:
+            "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
         userName: "Jane Smith",
         courseName: "Machine Learning 101",
         time: "19:31",
@@ -33,7 +36,8 @@ export const notifications = [
     {
         id: 4,
         type: "New Enrollment",
-        template: "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
+        template:
+            "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
         userName: "Emily Johnson",
         courseName: "Data Science Basics",
         time: "08:11",
@@ -41,7 +45,8 @@ export const notifications = [
     {
         id: 5,
         type: "New Enrollment",
-        template: "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
+        template:
+            "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
         userName: "Michael Brown",
         courseName: "Python for Beginners",
         time: "18 Sept",
@@ -49,7 +54,8 @@ export const notifications = [
     {
         id: 6,
         type: "New Enrollment",
-        template: "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
+        template:
+            "[User Name] has just enrolled in your course, '[Course Name]'. You can track their progress in your instructor dashboard.",
         userName: "Laura Wilson",
         courseName: "Web Development 101",
         time: "17 Sept",
