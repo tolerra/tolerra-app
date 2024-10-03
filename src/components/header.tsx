@@ -40,7 +40,9 @@ export default function Navbar({
                             href={
                                 userRole === "instructor"
                                     ? "/instructor/dashboard"
-                                    : "/student/dashboard"
+                                    : userRole === "admin"
+                                      ? "/admin/dashboard"
+                                      : "/student/dashboard"
                             }
                         >
                             <p className={`font-medium`}>Dashboard</p>
