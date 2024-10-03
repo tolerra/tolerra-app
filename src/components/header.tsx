@@ -1,26 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { isLoggedIn, getUserRole } from "@/app/actions/auth/auth-action";
 
-export default function Header() {
-    const [isSignedIn, setIsSignedIn] = useState(false);
-    const [userRole, setUserRole] = useState<string | null>(null);
-
-    useEffect(() => {
-        const checkAuthStatus = async () => {
-            const loggedIn = await isLoggedIn();
-            setIsSignedIn(loggedIn);
-            if (loggedIn) {
-                const role = await getUserRole();
-                setUserRole(role);
-            }
-        };
-
-        checkAuthStatus();
-    }, []);
+export default function Navbar({
+    isSignedIn,
+    userRole,
+}: {
+    isSignedIn: boolean;
+    userRole: string | null;
+}) {
+    console.log("APAKAH ANDA LOGIN:", isSignedIn);
 
     return (
         <header className="top-0 flex h-20 items-center bg-background px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20">
@@ -52,15 +42,11 @@ export default function Header() {
                             href={
                                 userRole === "instructor"
                                     ? "/instructor/dashboard"
-                                    : "/dashboard"
+                                    : "/student/dashboard"
                             }
                         >
                             <p className={`font-medium`}>Dashboard</p>
                         </Link>
-                        {userRole === "instructor" && (
-                            <p>logged as instructor</p>
-                        )}
-                        {userRole === "admin" && <p>logged as admin</p>}
                         <Link href="/profile">
                             <Image
                                 src="/assets/profile/default-profile.png"
@@ -78,7 +64,7 @@ export default function Header() {
                                 Sign In
                             </Button>
                         </Link>
-                        <Link href="/auth/sign-up">
+                        <Link href="/dashboard">
                             <Button className="w-32">Get Started</Button>
                         </Link>
                     </>

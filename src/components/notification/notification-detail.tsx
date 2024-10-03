@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { getNotifications } from '@/app/actions/student/notification-action'; // Import API call
@@ -28,7 +28,10 @@ export default function NotificationDetailClient() {
             const openedNotifications = JSON.parse(localStorage.getItem('openedNotifications') || '[]');
             if (!openedNotifications.includes(parseInt(id, 10))) {
                 openedNotifications.push(parseInt(id, 10));
-                localStorage.setItem('openedNotifications', JSON.stringify(openedNotifications));
+                localStorage.setItem(
+                    "openedNotifications",
+                    JSON.stringify(openedNotifications)
+                );
             }
         }
     }, []);

@@ -1,4 +1,4 @@
-import NotificationDetailClient from '@/components/notification/notification-detail';
+import NotificationDetailClient from "@/components/notification/notification-detail";
 
 export default function NotificationDetailPage() {
     return (
@@ -6,4 +6,4 @@ export default function NotificationDetailPage() {
             <NotificationDetailClient />
         </div>
     );
-}   
+}

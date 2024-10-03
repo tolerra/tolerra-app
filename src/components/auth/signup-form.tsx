@@ -35,7 +35,7 @@ export default function SignupForm() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result as string;
-                setDisabilityCard(base64String.split(",")[1]); // Remove data URL prefix
+                setDisabilityCard(base64String.split(",")[1]);
             };
             reader.readAsDataURL(selectedFile);
         }
