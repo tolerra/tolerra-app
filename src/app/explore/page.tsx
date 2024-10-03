@@ -1,10 +1,10 @@
 import getAllCourse from "@/app/actions/guest/explore-action";
-
-export const dynamic = "force-dynamic";
 import SearchBar from "@/components/explore/search-bar";
 import ExploreContent from "@/components/explore/explore-content";
 import FilterAccordion from "@/components/explore/filter-accordion";
 import ResultFor from "@/components/explore/results-for";
+
+export const dynamic = "force-dynamic";
 
 export interface ExploreProps {
     searchParams?: {
@@ -16,20 +16,8 @@ export interface ExploreProps {
 }
 
 export default async function Explore({ searchParams }: ExploreProps) {
-    const uniqueCategory = {
-        data: {
-            categories: [
-                { id: 1, name: "Development" },
-                { id: 2, name: "Business" },
-                { id: 3, name: "Design" },
-                { id: 4, name: "Marketing" },
-            ],
-        },
-    };
-
-    const data = uniqueCategory.data;
-    const allCourse = getAllCourse();
-    console.log(allCourse);
+    const { courses, categories } = await getAllCourse(); // Fetch courses and categories
+    console.log(courses, categories);
 
     return (
         <div className="grid grid-rows-[auto_1fr] min-h-screen w-full pt-8 pb-8">
@@ -41,7 +29,7 @@ export default async function Explore({ searchParams }: ExploreProps) {
                 <div className="md:col-span-1">
                     <div className="md:sticky md:top-4">
                         <ResultFor />
-                        <FilterAccordion categories={data.categories} />
+                        <FilterAccordion categories={categories} /> {/* Use dynamic categories */}
                     </div>
                 </div>
 

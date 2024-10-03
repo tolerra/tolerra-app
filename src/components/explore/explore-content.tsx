@@ -13,13 +13,13 @@ export default function ExploreContent({
 }: {
     courseSearchParams: ExploreProps["searchParams"];
 }) {
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);  // State should only expect Course[]
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchCourses = async () => {
-            const allCourses = await getAllCourse(); 
-            setCourses(allCourses);
+            const { courses } = await getAllCourse(); // Destructure only the courses from the API response
+            setCourses(courses); // Set only courses to the state
         };
 
         fetchCourses();

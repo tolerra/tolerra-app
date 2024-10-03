@@ -13,11 +13,12 @@ import { FaStar } from "react-icons/fa";
 
 interface FilterAccordionProps {
     categories: {
+        id: number;
         name: string;
     }[];
 }
 
-const ratings = [1, 2, 3, 4, 5];
+const ratings = [1, 2, 3, 4, 5]; // Define the ratings array
 
 export default function FilterAccordion({ categories }: FilterAccordionProps) {
     const router = useRouter();
@@ -44,7 +45,6 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
         }
         router.push(`?${params.toString()}`);
     };
-    
 
     const clearFilters = () => {
         setSelectedRatings([]);
@@ -52,12 +52,10 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
         router.push(window.location.pathname);
     };
 
-    const handleRatingChange = (rating: number) => {
+    const handleRatingChange = (rating: number) => { // Explicitly type the rating parameter
         setSelectedRatings((prevSelectedRatings) => {
             if (prevSelectedRatings.includes(rating)) {
-                const newRatings = prevSelectedRatings.filter(
-                    (r) => r !== rating
-                );
+                const newRatings = prevSelectedRatings.filter((r) => r !== rating);
                 addToUrl(newRatings, "min_rating");
                 return newRatings;
             } else {
@@ -74,11 +72,11 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
                 const newCategories = prevSelectedCategories.filter(
                     (c) => c !== category
                 );
-                addToUrl(newCategories, "category"); // Use category name
+                addToUrl(newCategories, "category");
                 return newCategories;
             } else {
                 const newCategories = [...prevSelectedCategories, category];
-                addToUrl(newCategories, "category"); // Use category name
+                addToUrl(newCategories, "category");
                 return newCategories;
             }
         });
@@ -105,30 +103,19 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
                     <AccordionTrigger>Minimum Rating</AccordionTrigger>
                     <AccordionContent>
                         {ratings.map((rating) => (
-                            <div
-                                className="flex items-center space-x-2 mb-2"
-                                key={rating}
-                            >
+                            <div className="flex items-center space-x-2 mb-2" key={rating}>
                                 <Checkbox
                                     id={`min_rating-${rating}`}
                                     checked={selectedRatings.includes(rating)}
-                                    onCheckedChange={() =>
-                                        handleRatingChange(rating)
-                                    }
+                                    onCheckedChange={() => handleRatingChange(rating)}
                                 />
                                 <Label
                                     htmlFor={`min_rating-${rating}`}
                                     className="flex items-center"
                                 >
-                                    {Array.from(
-                                        { length: rating },
-                                        (_, index) => (
-                                            <FaStar
-                                                key={index}
-                                                className="text-yellow-500"
-                                            />
-                                        )
-                                    )}
+                                    {Array.from({ length: rating }, (_, index) => (
+                                        <FaStar key={index} className="text-yellow-500" />
+                                    ))}
                                 </Label>
                             </div>
                         ))}
@@ -139,23 +126,13 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
                     <AccordionTrigger>Category</AccordionTrigger>
                     <AccordionContent>
                         {categories.map((category) => (
-                            <div
-                                className="flex items-center space-x-2 mb-2"
-                                key={category.name}
-                            >
+                            <div className="flex items-center space-x-2 mb-2" key={category.name}>
                                 <Checkbox
                                     id={`category-${category.name}`}
-                                    checked={selectedCategories.includes(
-                                        category.name
-                                    )}
-                                    onCheckedChange={() =>
-                                        handleCategoryChange(category.name)
-                                    }
+                                    checked={selectedCategories.includes(category.name)}
+                                    onCheckedChange={() => handleCategoryChange(category.name)}
                                 />
-                                <Label
-                                    htmlFor={`category-${category.name}`}
-                                    className="capitalize"
-                                >
+                                <Label htmlFor={`category-${category.name}`} className="capitalize">
                                     {category.name}
                                 </Label>
                             </div>
