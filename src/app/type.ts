@@ -52,3 +52,14 @@ export interface Comment {
 export interface ThreadWithComments extends Thread {
     comments: Comment[];
 }
+
+export interface Notification {
+    id: number;
+    event_type: string;
+    msg: string;
+    user: {
+        id: number;
+        name: string;
+    };
+    created_at: string;
+}
