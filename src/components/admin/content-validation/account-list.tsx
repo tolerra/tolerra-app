@@ -15,11 +15,12 @@ import { getUserToken } from "@/app/actions/auth/auth-action";
 
 interface DisabilityVerification {
     id: number;
-    user: {
-        name: string;
-    };
+    user_id: number;
+    user_name: string;
+    file_path: string | null;
+    is_verified: boolean;
     created_at: string;
-    status: string;
+    updated_at: string;
 }
 
 export default function AccountValidation() {
@@ -33,7 +34,7 @@ export default function AccountValidation() {
         const fetchData = async () => {
             const token = await getUserToken();
             const data = await getDisabilityVerifications(token);
-            setVerifications(data);
+            setVerifications(data.verifications);
         };
         fetchData();
     }, []);
@@ -48,16 +49,18 @@ export default function AccountValidation() {
         setVerifications((prevData) =>
             prevData.map((verification) =>
                 verification.id === id
-                    ? { ...verification, status: "Completed" }
+                    ? { ...verification, is_verified: true }
                     : verification
             )
         );
+        // TODO: Implement API call to update verification status
     };
 
     const handleDeny = (id: number) => {
         setVerifications((prevData) =>
             prevData.filter((verification) => verification.id !== id)
         );
+        // TODO: Implement API call to delete or mark as denied
     };
 
     return (
@@ -68,6 +71,9 @@ export default function AccountValidation() {
                         <div className="flex flex-col sm:flex-row items-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
                             <div>
+                                <div className="text-lg font-semibold mb-3 text-center sm:text-left">
+                                    {verification.user_name}
+                                </div>
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:justify-start space-y-2 sm:space-y-0 sm:space-x-4">
                                     <div className="text-sm text-gray-500 text-center sm:text-left">
                                         {new Date(
@@ -76,12 +82,14 @@ export default function AccountValidation() {
                                     </div>
                                     <span
                                         className={`px-2 py-1 rounded-md text-xs inline-block text-center ${
-                                            verification.status === "Pending"
-                                                ? "bg-yellow-100 text-yellow-600"
-                                                : "bg-green-100 text-green-600"
+                                            verification.is_verified
+                                                ? "bg-green-100 text-green-600"
+                                                : "bg-yellow-100 text-yellow-600"
                                         }`}
                                     >
-                                        {verification.status}
+                                        {verification.is_verified
+                                            ? "Verified"
+                                            : "Pending"}
                                     </span>
                                 </div>
                             </div>
@@ -110,14 +118,20 @@ export default function AccountValidation() {
                                         alt="deny-button"
                                     />
                                 </button>
-                                <Link href="/">
-                                    <Image
-                                        src="/assets/admin/download.svg"
-                                        width={19}
-                                        height={19}
-                                        alt="download-button"
-                                    />
-                                </Link>
+                                {verification.file_path && (
+                                    <Link
+                                        href={verification.file_path}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <Image
+                                            src="/assets/admin/download.svg"
+                                            width={19}
+                                            height={19}
+                                            alt="view-file-button"
+                                        />
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </CardContent>
