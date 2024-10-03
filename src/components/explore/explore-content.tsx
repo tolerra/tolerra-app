@@ -13,13 +13,13 @@ export default function ExploreContent({
 }: {
     courseSearchParams: ExploreProps["searchParams"];
 }) {
-    const [courses, setCourses] = useState<Course[]>([]);  // State should only expect Course[]
+    const [courses, setCourses] = useState<Course[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchCourses = async () => {
-            const { courses } = await getAllCourse(); // Destructure only the courses from the API response
-            setCourses(courses); // Set only courses to the state
+            const { courses } = await getAllCourse();
+            setCourses(courses);
         };
 
         fetchCourses();
@@ -77,7 +77,7 @@ export default function ExploreContent({
                                     description={course.brief}
                                     instructor={course.instructor_name} 
                                     rating={parseFloat(course.average_rating) || 0} 
-                                    imageSrc={course.image || "https://picsum.photos/223/120"} //picsum placeholder
+                                    imageSrc={course.image || "https://picsum.photos/223/120"}
                                     category={course.category_name} 
                                     isLowVisionFriendly={true}                                    
                                 />

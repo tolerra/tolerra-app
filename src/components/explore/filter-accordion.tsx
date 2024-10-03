@@ -18,7 +18,7 @@ interface FilterAccordionProps {
     }[];
 }
 
-const ratings = [1, 2, 3, 4, 5]; // Define the ratings array
+const ratings = [1, 2, 3, 4, 5];
 
 export default function FilterAccordion({ categories }: FilterAccordionProps) {
     const router = useRouter();
@@ -52,7 +52,7 @@ export default function FilterAccordion({ categories }: FilterAccordionProps) {
         router.push(window.location.pathname);
     };
 
-    const handleRatingChange = (rating: number) => { // Explicitly type the rating parameter
+    const handleRatingChange = (rating: number) => {
         setSelectedRatings((prevSelectedRatings) => {
             if (prevSelectedRatings.includes(rating)) {
                 const newRatings = prevSelectedRatings.filter((r) => r !== rating);
