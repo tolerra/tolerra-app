@@ -28,19 +28,58 @@ export async function getThreadById(
     }
 }
 
-export async function addThread(threadData: {
-    category_id: number;
-    user_id: number;
-    content: string;
-}) {
+export async function addThread(
+    threadData: {
+        category_id: number;
+        user_id: number;
+        title: string;
+        content: string;
+    },
+    token: null | string
+) {
     try {
-        const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/threads`,
-            threadData
-        );
+        const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/threads`);
+        const response = await axios.post(url.toString(), threadData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (error) {
         console.error("Error creating new thread:", error);
         throw error;
+    }
+}
+
+export async function addThreadComment(
+    threadData: { user_id: number; content: string },
+    thread_id: number,
+    token: null | string
+) {
+    try {
+        const url = new URL(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/threads/${thread_id}/comment`
+        );
+        const response = await axios.post(url.toString(), threadData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating thread comment:", error);
+        throw error;
+    }
+}
+
+export async function getAllCategories() {
+    try {
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/categories`
+        );
+        return response.data;
+    } catch (error) {
+        console.log("Error:", error);
+        return error;
     }
 }

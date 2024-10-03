@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import NotificationItem from '@/components/notification/notification-item';
-import PaginationClient from '@/components/pagination-client';
-import { getNotifications } from '@/app/actions/student/notification-action';
-import { getUserId } from '@/app/actions/auth/auth-action';
-import { Notification } from '@/app/type';
+import { useEffect, useState } from "react";
+import NotificationItem from "@/components/notification/notification-item";
+import PaginationClient from "@/components/pagination-client";
+import { getNotifications } from "@/app/actions/student/notification-action";
+import { getUserId } from "@/app/actions/auth/auth-action";
+import { Notification } from "@/app/type";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -26,10 +26,10 @@ export default function NotificationList() {
                     setNotifications(notificationsData);
                     setTotalNotifications(notificationsData.length);
                 } else {
-                    setError('User ID not found.');
+                    setError("User ID not found.");
                 }
             } catch (err) {
-                setError('Failed to fetch notifications.');
+                setError("Failed to fetch notifications.");
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -62,7 +62,10 @@ export default function NotificationList() {
                         id={notification.id}
                         type={notification.event_type}
                         template={notification.msg}
-                        userName={notification.user.name || notification.user.id.toString()}
+                        userName={
+                            notification.user.name ||
+                            notification.user.id.toString()
+                        }
                         time={notification.created_at || "N/A"}
                     />
                 ))
