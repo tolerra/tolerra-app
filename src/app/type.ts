@@ -1,3 +1,5 @@
+import exp from "node:constants";
+
 export interface Review {
     course_id: number;
     student_id: number;
@@ -35,6 +37,7 @@ export interface ValidationErrorResponse {
 
 export interface Thread {
     id: number;
+    title: string;
     category_id: number;
     user_id: number;
     content: string;
@@ -62,4 +65,9 @@ export interface Notification {
         name: string;
     };
     created_at: string;
+}
+
+export interface Category {
+    id: number;
+    name: string;
 }

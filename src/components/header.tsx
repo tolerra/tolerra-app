@@ -78,7 +78,7 @@ export default function Navbar({
                                 Sign In
                             </Button>
                         </Link>
-                        <Link href="/dashboard">
+                        <Link href="/auth/sign-up">
                             <Button className="w-32">Get Started</Button>
                         </Link>
                     </>

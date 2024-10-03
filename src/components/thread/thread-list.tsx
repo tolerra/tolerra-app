@@ -30,7 +30,15 @@ export default function ThreadList({ initialThreads }: ThreadListProps) {
         <div className="grid grid-cols-1 gap-4 w-full max-w-4xl">
             {paginatedThreads.length > 0 ? (
                 paginatedThreads.map((thread) => (
-                    <ThreadCard key={thread.id} {...thread} />
+                    <ThreadCard
+                        key={thread.id}
+                        id={thread.id}
+                        title={thread.title}
+                        category_id={thread.category_id}
+                        user_id={thread.user_id}
+                        content={thread.content}
+                        created_at={thread.created_at}
+                    />
                 ))
             ) : (
                 <p className="text-center text-gray-500">

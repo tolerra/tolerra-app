@@ -18,8 +18,8 @@ export default async function ThreadDetailPage({
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-2">Thread #{threadData.id}</h1>
-            <p className="text-gray-600 mb-4">User {threadData.user_id}</p>
+            <h1 className="text-3xl font-bold mb-2">{threadData.title}</h1>
+            <p className="text-gray-600 mb-4">User {threadData.id}</p>
             <p className="text-gray-500 mb-8">
                 {new Date(threadData.created_at).toLocaleDateString("en-US", {
                     year: "numeric",

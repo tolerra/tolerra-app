@@ -64,7 +64,7 @@ export default function SignupForm() {
 
             const result = await SignUp(signupData);
             if (result.success) {
-                router.push("/dashboard");
+                router.push("/");
             } else {
                 setError(
                     result.error || "An error occurred during registration"
