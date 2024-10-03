@@ -41,7 +41,7 @@ export default function NotificationDetailClient() {
 
     return (
         <div className="flex flex-col items-center justify-center mt-20 p-8">
-            <div className="w-full max-w-2xl p-6 border border-gray-200 rounded-lg text-center p-8">
+            <div className="w-full max-w-2xl p-6 border border-gray-200 rounded-lg text-center">
                 <h2 className="text-xl font-bold mb-8 text-center">{notification.type}</h2>
                 <p className="mb-4 text-sm text-start">{formattedTemplate}</p>
                 <div className="flex justify-between w-full mt-6">
