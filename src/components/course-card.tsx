@@ -5,7 +5,7 @@ interface CourseCardProps {
     id: number;
     name: string;
     instructor_name: string;
-    average_rating: string;
+    average_rating?: string;
     isDashboard: boolean;
 }
 
@@ -16,7 +16,7 @@ export default function CourseCard({
     average_rating,
     isDashboard,
 }: CourseCardProps) {
-    const link = isDashboard ? `/courses/learn/${id}/1` : `/courses/${id}`;
+    const link = isDashboard ? `/course/${id}` : `/courses/${id}`;
     return (
         <Link href={link}>
             <div

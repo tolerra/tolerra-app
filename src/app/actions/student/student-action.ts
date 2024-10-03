@@ -43,3 +43,20 @@ export async function getCourseData(id: number) {
 
     return data.course;
 }
+
+export async function getEnrolledCourse(token: null | string) {
+    try {
+        const url = new URL(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/student/enrolled-course`
+        );
+        const response = await axios.get(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching enrolled courses:", error);
+        return [];
+    }
+}

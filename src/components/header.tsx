@@ -10,8 +10,6 @@ export default function Navbar({
     isSignedIn: boolean;
     userRole: string | null;
 }) {
-    console.log("APAKAH ANDA LOGIN:", isSignedIn);
-
     return (
         <header className="top-0 flex h-20 items-center bg-background px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20">
             <Link
@@ -46,6 +44,22 @@ export default function Navbar({
                             }
                         >
                             <p className={`font-medium`}>Dashboard</p>
+                        </Link>
+                        <Link href="/thread">
+                            <Image
+                                src="/assets/header/thread-icon.svg"
+                                alt="Profile"
+                                width={22}
+                                height={22}
+                            />
+                        </Link>
+                        <Link href="/notification">
+                            <Image
+                                src="/assets/header/notification-icon.svg"
+                                alt="Profile"
+                                width={22}
+                                height={22}
+                            />
                         </Link>
                         <Link href="/profile">
                             <Image
